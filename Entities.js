@@ -2,8 +2,11 @@ var bloodBoss = 1000;
 var damageBoss = 1000;
 var bloodPlayer = 4000;
 var damagePlayer = 500;
+var playerLose = false;
 let keyPlayer;
 let keyDemon;
+window.isPlaygame = false;
+window.wingame = false;
 class Entity extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, key) {
         super(scene, x, y, key);
@@ -32,10 +35,15 @@ class Player extends Entity {
         var player = this;
         if (!this.getData("isDead") && isControllable && this.getData("isDead") !== undefined) {
             if (this.scene.sys.game.device.os.desktop) {
-                player.body.setVelocityX(250);
-                player.anims.play(`${keyPlayer}TurnMotion`, true);
-                player.flipX = false;
+                if (window.isPlaygame) {
+                    player.body.setVelocityX(250);
+                    player.anims.play(`${keyPlayer}TurnMotion`, true);
+                    player.flipX = false;
+                }
                 if (this.scene.cursors.space.isDown) {
+                    // player.body.setVelocityX(250);
+                    // player.anims.play(`${keyPlayer}TurnMotion`, true);
+                    // player.flipX = false;
                     if (player.getData("timerShootTick") < player.getData("timerShootDelay")) {
                         player.setData("timerShootTick", player.getData("timerShootTick") + 1);
                     } else {
@@ -62,9 +70,11 @@ class Player extends Entity {
                     player.anims.play(`${keyPlayer}JumpMotion`);
                 }
             } else {
-                player.body.setVelocityX(250);
-                player.anims.play(`${keyPlayer}TurnMotion`, true);
-                player.flipX = false;
+                if (window.isPlaygame) {
+                    player.body.setVelocityX(250);
+                    player.anims.play(`${keyPlayer}TurnMotion`, true);
+                    player.flipX = false;
+                }
                 if (isFire) {
                     if (player.getData("timerShootTick") < player.getData("timerShootDelay")) {
                         player.setData("timerShootTick", player.getData("timerShootTick") + 1);
@@ -112,10 +122,9 @@ class Player extends Entity {
     }
 
     onFailure(gameOver) {
+        playerLose = true;
         this.scene.playSound("loseSound");
         Sounds["bgSound"].pause();
-        this.scene.turnRight.setVisible(false);
-        this.scene.turnLeft.setVisible(false);
         this.scene.jump.setVisible(false);
         this.scene.fire.setVisible(false);
         this.scene.player.body.setImmovable(true);
@@ -145,13 +154,12 @@ class Player extends Entity {
             repeat: 0,
             yoyo: false,
         });
+        window.isPlaygame = false;
     }
 
     onSuccessfuly(gameWin) {
         this.scene.playSound("winSound");
         Sounds["bgSound"].pause();
-        this.scene.turnRight.setVisible(false);
-        this.scene.turnLeft.setVisible(false);
         this.scene.jump.setVisible(false);
         this.scene.fire.setVisible(false);
         this.scene.add.tween({
@@ -167,6 +175,7 @@ class Player extends Entity {
             repeat: 0,
             yoyo: false,
         });
+        window.isPlaygame = false;
     }
 }
 class Demon extends Entity {
@@ -180,9 +189,33 @@ class Demon extends Entity {
     }
     update() {
         var demon = this;
-        demon.body.setVelocityX(250);
-        demon.anims.play(`${keyDemon}Motion`, true);
-        demon.flipX = false;
+        if (window.isPlaygame) {
+            demon.body.setVelocityX(250);
+            demon.anims.play(`${keyDemon}Motion`, true);
+            demon.flipX = false;
+        }
+        if (playerLose) {
+            demon.anims.play(`${keyDemon}IdleMotion`, true);
+            demon.body.setVelocityX(0);
+            demon.body.setVelocityY(0);
+        }
+        if (window.wingame) {
+            window.wingame = false;
+            demon.body.velocity.x = 0;
+            demon.body.velocity.y = -500;
+            demon.body.setImmovable(true);
+            this.scene.add.tween({
+                targets: demon,
+                ease: "Sine.easeInOut",
+                duration: 1000,
+                alpha: {
+                    getStart: () => 1,
+                    getEnd: () => 0,
+                },
+                repeat: 0,
+                yoyo: false,
+            });
+        }
     }
 }
 
