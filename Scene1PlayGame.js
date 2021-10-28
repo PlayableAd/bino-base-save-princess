@@ -6,7 +6,7 @@ class Scene1PlayGame extends Phaser.Scene {
         super({ key: "Scene1PlayGame" });
     }
     init() {
-        playerImageKey = "sprMovementPlayer1"
+        playerImageKey = "sprMovementPlayer1";
     }
     create() {
         isControllable = true;
@@ -248,7 +248,7 @@ class Scene1PlayGame extends Phaser.Scene {
             this.physics.add.collider(this.player, this.springs, this.impactSprings, null, this);
         });
         this.map.getObjectLayer("jumpDemonPoint").objects.forEach((JumpPointData) => {
-            this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y)
+            this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y);
             this.jumpPoint.body.moves = false;
             this.physics.add.collider(this.jumpPoint, this.groundLayer);
             this.physics.add.collider(this.demon, this.jumpPoint, this.impactJumpDemon, null, this);
@@ -317,45 +317,33 @@ class Scene1PlayGame extends Phaser.Scene {
         });
 
         this.downloadNow.on("pointerdown", function () {
-            console.log("GOTOSTORE")
+            console.log("GOTOSTORE");
         });
 
         this.gameOver.on("pointerdown", function () {
-            console.log("GOTOSTORE")
+            console.log("GOTOSTORE");
         });
         this.gameWin.on("pointerdown", function () {
-            console.log("GOTOSTORE")
+            console.log("GOTOSTORE");
         });
 
-        this.jump = new AssetStatic(this, this.game.scale.width / 1.09, this.cameras.main.height - 100, "sprController")
-            .setDepth(3)
-            .setScrollFactor(0)
-            .setFrame(4)
-            .setScale(1)
-            .setVisible(false)
-            .setInteractive({ draggable: true });
-        this.fire = new AssetStatic(this, this.game.scale.width / 1.09 - 70, this.cameras.main.height - 45, "sprController")
-            .setDepth(3)
-            .setScrollFactor(0)
-            .setFrame(6)
-            .setScale(1)
-            .setVisible(false)
-            .setInteractive({ draggable: true });
-        this.jump
-            .on("pointerdown", function () {
-                isJump = true;
-            })
-            .on("pointerout", function () {
-                isJump = false;
-            });
+        this.jump = new AssetStatic(this, this.game.scale.width / 1.09, this.cameras.main.height - 100, "sprController").setDepth(3).setScrollFactor(0).setFrame(4).setScale(1).setVisible(false).setInteractive({ draggable: true });
+        this.fire = new AssetStatic(this, this.game.scale.width / 1.09 - 70, this.cameras.main.height - 45, "sprController").setDepth(3).setScrollFactor(0).setFrame(6).setScale(1).setVisible(false).setInteractive({ draggable: true });
+        // this.jump
+        //     .on("pointerdown", function () {
+        //         isJump = true;
+        //     })
+        //     .on("pointerout", function () {
+        //         isJump = false;
+        //     });
 
-        this.fire
-            .on("pointerdown", function () {
-                isFire = true;
-            })
-            .on("pointerout", function () {
-                isFire = false;
-            });
+        // this.fire
+        //     .on("pointerdown", function () {
+        //         isFire = true;
+        //     })
+        //     .on("pointerout", function () {
+        //         isFire = false;
+        //     });
 
         this.physics.world.bounds.width = this.groundLayer.width;
         this.physics.world.bounds.height = this.groundLayer.height;
@@ -372,13 +360,21 @@ class Scene1PlayGame extends Phaser.Scene {
         this.cameras.main.pan(0, this.groundLayer.height, 1000, "Sine.easeInOut");
         this.cameras.main.setFollowOffset(0, -300);
         Sounds["bgSound"].play();
-        this.input.on("pointerdown", function () {
-            if (!Sounds["bgSound"].playing() && !isMuted) {
-                Sounds["bgSound"].play();
+        this.input
+            .on("pointerdown", function () {
+                if (!Sounds["bgSound"].playing() && !isMuted) {
+                    Sounds["bgSound"].play();
+                }
                 this.scene.tapToPlay.setVisible(false);
                 isPlaygame = true;
-            }
-        })
+                isJump = true;
+            })
+            .on("pointerup", function () {
+                isJump = false;
+            })
+            .on("pointerout", function () {
+                isJump = false;
+            });
         this.cameras.main.roundPixels = true;
         this.cameras.main.pixelArt = true;
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -393,12 +389,13 @@ class Scene1PlayGame extends Phaser.Scene {
             }
             this.handleLoseFocus();
         });
-        this.resize()
+        this.resize();
         this.scale.on("resize", this.resize, this);
     }
 
     resize() {
-        let width = window.innerWidth, height = window.innerHeight;
+        let width = window.innerWidth,
+            height = window.innerHeight;
         this.cameras.resize(width, height);
         this.background.setSize(width, height);
         this.tapToPlay.setPosition(width / 2, height / 2);
@@ -578,7 +575,6 @@ class Scene1PlayGame extends Phaser.Scene {
     impactDemon(demon, player) {
         if (!demon.getData("isDead")) {
             if (demon.body.touching.up) {
-
             } else {
                 if (!player.getData("isDead")) {
                     player.play(`${playerImageKey}DeadMotion`);
@@ -632,12 +628,11 @@ class Scene1PlayGame extends Phaser.Scene {
 
             repeat: 0,
             yoyo: false,
-            loop: 3
+            loop: 3,
         });
         window.wingame = true;
         window.isPlaygame = false;
         this.physics.world.removeCollider(collierDemonWithGround);
-
     }
 
     impactPrincess(player, princess) {
@@ -752,4 +747,4 @@ class Scene1PlayGame extends Phaser.Scene {
         }
     }
 }
-function gameClose() { }
+function gameClose() {}
