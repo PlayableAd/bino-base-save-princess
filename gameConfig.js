@@ -7,7 +7,7 @@ var config = {
         default: "arcade",
         arcade: {
             gravity: { x: 0, y: 1000 },
-            // debug: true,
+            debug: true,
         },
     },
     scale: {
@@ -22,7 +22,7 @@ var config = {
     input: {
         activePointers: 3,
     },
-    roundPixels: false,
+    roundPixels: true,
     pixelArt: false,
 };
 game = new Phaser.Game(config);

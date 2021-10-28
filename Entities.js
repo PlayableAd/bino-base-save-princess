@@ -185,7 +185,7 @@ class Demon extends Entity {
         keyDemon = key
         this.setDepth(2);
         this.body.acceleration.y = 700;
-        this.body.setSize(128, 128);
+        this.body.setSize(128, 128).setOffset(0, -10);
     }
     update() {
         var demon = this;

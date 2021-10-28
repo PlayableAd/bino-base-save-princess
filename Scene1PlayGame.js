@@ -12,7 +12,7 @@ class Scene1PlayGame extends Phaser.Scene {
         isControllable = true;
         this.cameras.main.fadeIn(1000, 0, 0, 0);
         this.map = this.make.tilemap({ key: "map" });
-        this.groundTiles = this.map.addTilesetImage("tile_mario", "sprTileMap");
+        this.groundTiles = this.map.addTilesetImage("tile", "sprTileMap");
         this.background = this.add.tileSprite(0, 0, this.cameras.main.width, this.cameras.main.height, "sprBackground").setScrollFactor(0).setOrigin(0, 0);
 
         this.background1 = this.map.createDynamicLayer("BG", this.groundTiles, 0, 0);

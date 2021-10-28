@@ -60,7 +60,7 @@ class Preload extends Phaser.Scene {
                 start: 1,
                 end: 11,
             }),
-            frameRate: 15,
+            frameRate: 30,
             repeat: -1,
         });
         this.anims.create({
