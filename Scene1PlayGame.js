@@ -45,12 +45,12 @@ class Scene1PlayGame extends Phaser.Scene {
             this.physics.add.collider(this.player, this.trap, this.standOnTrap, null, this);
             this.physics.add.collider(this.player, this.bossAttackGroup, this.attackPlayer, null, this);
         });
-        this.map.getObjectLayer("DemonPosition").objects.forEach((demon) => {
-            console.log(demon);
-            this.demon = new Demon(this, demon.x, demon.y, "sprMovementDemon").setDepth(3).setScale(1);
-            this.physics.add.collider(this.demon, this.player, this.impactDemon, null, this);
-            collierDemonWithGround = this.physics.add.collider(this.demon, this.groundLayer);
-        });
+        // this.map.getObjectLayer("DemonPosition").objects.forEach((demon) => {
+        //     console.log(demon);
+        //     this.demon = new Demon(this, demon.x, demon.y, "sprMovementDemon").setDepth(3).setScale(1);
+        //     this.physics.add.collider(this.demon, this.player, this.impactDemon, null, this);
+        //     collierDemonWithGround = this.physics.add.collider(this.demon, this.groundLayer);
+        // });
 
         this.map.getObjectLayer("Coins").objects.forEach((coin) => {
             this.coin = new Coins(this, coin.x, coin.y, "sprCoinMotion");
@@ -225,34 +225,34 @@ class Scene1PlayGame extends Phaser.Scene {
             });
         });
 
-        this.map.getObjectLayer("Princess").objects.forEach((princessData) => {
-            this.princess = new Princess(this, princessData.x, princessData.y, "sprPrincessPlayer");
-            this.case = new AssetStatic(this, princessData.x, princessData.y - 25, "sprCase").setDepth(3);
+        // this.map.getObjectLayer("Princess").objects.forEach((princessData) => {
+        //     this.princess = new Princess(this, princessData.x, princessData.y, "sprPrincessPlayer");
+        //     this.case = new AssetStatic(this, princessData.x, princessData.y - 25, "sprCase").setDepth(3);
 
-            this.physics.world.enableBody(this.case, 0);
-            this.case.body.setCollideWorldBounds(true);
-            this.case.body.setImmovable(true);
-            this.princess.play("sprPrincessCryMotion");
-            this.physics.add.collider(this.princess, this.groundLayer);
-            this.physics.add.collider(this.case, this.groundLayer);
-            // this.physics.add.collider(this.case, this.player);
-            this.physics.add.collider(this.player, this.princess, this.impactPrincess, null, this);
-        });
+        //     this.physics.world.enableBody(this.case, 0);
+        //     this.case.body.setCollideWorldBounds(true);
+        //     this.case.body.setImmovable(true);
+        //     this.princess.play("sprPrincessCryMotion");
+        //     this.physics.add.collider(this.princess, this.groundLayer);
+        //     this.physics.add.collider(this.case, this.groundLayer);
+        //     // this.physics.add.collider(this.case, this.player);
+        //     this.physics.add.collider(this.player, this.princess, this.impactPrincess, null, this);
+        // });
 
-        this.map.getObjectLayer("Springs").objects.forEach((springsData) => {
-            this.springs = new Springs(this, springsData.x, springsData.y, "sprSprings");
-            this.springs.play("sprSpringsIdleMotion");
-            this.springs.body.setImmovable(true);
-            this.springs.body.moves = false;
-            this.physics.add.collider(this.springs, this.groundLayer);
-            this.physics.add.collider(this.player, this.springs, this.impactSprings, null, this);
-        });
-        this.map.getObjectLayer("jumpDemonPoint").objects.forEach((JumpPointData) => {
-            this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y);
-            this.jumpPoint.body.moves = false;
-            this.physics.add.collider(this.jumpPoint, this.groundLayer);
-            this.physics.add.collider(this.demon, this.jumpPoint, this.impactJumpDemon, null, this);
-        });
+        // this.map.getObjectLayer("Springs").objects.forEach((springsData) => {
+        //     this.springs = new Springs(this, springsData.x, springsData.y, "sprSprings");
+        //     this.springs.play("sprSpringsIdleMotion");
+        //     this.springs.body.setImmovable(true);
+        //     this.springs.body.moves = false;
+        //     this.physics.add.collider(this.springs, this.groundLayer);
+        //     this.physics.add.collider(this.player, this.springs, this.impactSprings, null, this);
+        // });
+        // this.map.getObjectLayer("jumpDemonPoint").objects.forEach((JumpPointData) => {
+        //     this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y);
+        //     this.jumpPoint.body.moves = false;
+        //     this.physics.add.collider(this.jumpPoint, this.groundLayer);
+        //     this.physics.add.collider(this.demon, this.jumpPoint, this.impactJumpDemon, null, this);
+        // });
 
         this.map.getObjectLayer("DynamicWorld").objects.forEach((dynamicsWorldData) => {
             var nameWorld = this.getPropertiesObject(dynamicsWorldData.properties, {
@@ -645,25 +645,25 @@ class Scene1PlayGame extends Phaser.Scene {
             repeat: 0,
         });
 
-        this.add.tween({
-            targets: [player, this.princess],
-            ease: "Sine.easeInOut",
-            duration: 700,
-            delay: 0,
-            alpha: {
-                getStart: () => 1,
-                getEnd: () => 0,
-            },
-            repeat: 0,
-            yoyo: false,
-            loop: 0,
-            onComplete: () => {
-                player.onSuccessfuly(this.gameWin);
-                player.onSuccessfuly(this.logo);
-                player.body.velocity.x = 0;
-                endGame = true;
-            },
-        });
+        // this.add.tween({
+        //     targets: [player, this.princess],
+        //     ease: "Sine.easeInOut",
+        //     duration: 700,
+        //     delay: 0,
+        //     alpha: {
+        //         getStart: () => 1,
+        //         getEnd: () => 0,
+        //     },
+        //     repeat: 0,
+        //     yoyo: false,
+        //     loop: 0,
+        //     onComplete: () => {
+        //         player.onSuccessfuly(this.gameWin);
+        //         player.onSuccessfuly(this.logo);
+        //         player.body.velocity.x = 0;
+        //         endGame = true;
+        //     },
+        // });
     }
 
     standOnTrap(player, trap) {
@@ -705,7 +705,7 @@ class Scene1PlayGame extends Phaser.Scene {
     update() {
         if (nLoaded >= nAssets) {
             this.player.update();
-            this.demon.update();
+            // this.demon.update();
             // boss.update();
             // this.cameras.main.followOffset.set(0, -200);
             if (this.player.getData("isDead")) {
