@@ -58,9 +58,9 @@ class Preload extends Phaser.Scene {
             key: "sprMovementPlayer1TurnMotion",
             frames: this.anims.generateFrameNumbers("sprMovementPlayer1", {
                 start: 1,
-                end: 3,
+                end: 11,
             }),
-            frameRate: 10,
+            frameRate: 15,
             repeat: -1,
         });
         this.anims.create({
@@ -97,13 +97,13 @@ class Preload extends Phaser.Scene {
 
         this.anims.create({
             key: "sprMovementPlayer1DeadMotion",
-            frames: [{ key: "sprMovementPlayer1", frame: 5 }],
+            frames: [{ key: "sprMovementPlayer1", frame: 13 }],
             frameRate: 4,
             repeat: 0,
         });
         this.anims.create({
             key: "sprMovementPlayer1JumpMotion",
-            frames: [{ key: "sprMovementPlayer1", frame: 4 }],
+            frames: [{ key: "sprMovementPlayer1", frame: 12 }],
             frameRate: 4,
             repeat: 0,
         });

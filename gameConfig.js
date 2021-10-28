@@ -23,7 +23,7 @@ var config = {
         activePointers: 3,
     },
     roundPixels: false,
-    pixelArt: true,
+    pixelArt: false,
 };
 game = new Phaser.Game(config);
 
