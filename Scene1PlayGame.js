@@ -1,6 +1,9 @@
 let playerImageKey = "sprMovementPlayer1";
 let checkEnd;
 let collierDemonWithGround;
+let isAutoRun = true;
+let isDemonChase = false;
+let isPrincess = true;
 class Scene1PlayGame extends Phaser.Scene {
     constructor() {
         super({ key: "Scene1PlayGame" });
@@ -45,13 +48,14 @@ class Scene1PlayGame extends Phaser.Scene {
             this.physics.add.collider(this.player, this.trap, this.standOnTrap, null, this);
             this.physics.add.collider(this.player, this.bossAttackGroup, this.attackPlayer, null, this);
         });
-        // this.map.getObjectLayer("DemonPosition").objects.forEach((demon) => {
-        //     console.log(demon);
-        //     this.demon = new Demon(this, demon.x, demon.y, "sprMovementDemon").setDepth(3).setScale(1);
-        //     this.physics.add.collider(this.demon, this.player, this.impactDemon, null, this);
-        //     collierDemonWithGround = this.physics.add.collider(this.demon, this.groundLayer);
-        // });
-
+        if (isAutoRun) {
+            this.map.getObjectLayer("DemonPosition").objects.forEach((demon) => {
+                console.log(demon);
+                this.demon = new Demon(this, demon.x, demon.y, "sprMovementDemon").setDepth(3).setScale(1);
+                this.physics.add.collider(this.demon, this.player, this.impactDemon, null, this);
+                collierDemonWithGround = this.physics.add.collider(this.demon, this.groundLayer);
+            });
+        }
         this.map.getObjectLayer("Coins").objects.forEach((coin) => {
             this.coin = new Coins(this, coin.x, coin.y, "sprCoinMotion");
             this.coinsGroup.add(this.coin);
@@ -225,35 +229,37 @@ class Scene1PlayGame extends Phaser.Scene {
             });
         });
 
-        // this.map.getObjectLayer("Princess").objects.forEach((princessData) => {
-        //     this.princess = new Princess(this, princessData.x, princessData.y, "sprPrincessPlayer");
-        //     this.case = new AssetStatic(this, princessData.x, princessData.y - 25, "sprCase").setDepth(3);
+        if (isAutoRun) {
+            if (isPrincess) {
+                this.map.getObjectLayer("Princess").objects.forEach((princessData) => {
+                    this.princess = new Princess(this, princessData.x, princessData.y, "sprPrincessPlayer");
+                    this.case = new AssetStatic(this, princessData.x, princessData.y - 25, "sprCase").setDepth(3);
 
-        //     this.physics.world.enableBody(this.case, 0);
-        //     this.case.body.setCollideWorldBounds(true);
-        //     this.case.body.setImmovable(true);
-        //     this.princess.play("sprPrincessCryMotion");
-        //     this.physics.add.collider(this.princess, this.groundLayer);
-        //     this.physics.add.collider(this.case, this.groundLayer);
-        //     // this.physics.add.collider(this.case, this.player);
-        //     this.physics.add.collider(this.player, this.princess, this.impactPrincess, null, this);
-        // });
-
-        // this.map.getObjectLayer("Springs").objects.forEach((springsData) => {
-        //     this.springs = new Springs(this, springsData.x, springsData.y, "sprSprings");
-        //     this.springs.play("sprSpringsIdleMotion");
-        //     this.springs.body.setImmovable(true);
-        //     this.springs.body.moves = false;
-        //     this.physics.add.collider(this.springs, this.groundLayer);
-        //     this.physics.add.collider(this.player, this.springs, this.impactSprings, null, this);
-        // });
-        // this.map.getObjectLayer("jumpDemonPoint").objects.forEach((JumpPointData) => {
-        //     this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y);
-        //     this.jumpPoint.body.moves = false;
-        //     this.physics.add.collider(this.jumpPoint, this.groundLayer);
-        //     this.physics.add.collider(this.demon, this.jumpPoint, this.impactJumpDemon, null, this);
-        // });
-
+                    this.physics.world.enableBody(this.case, 0);
+                    this.case.body.setCollideWorldBounds(true);
+                    this.case.body.setImmovable(true);
+                    this.princess.play("sprPrincessCryMotion");
+                    this.physics.add.collider(this.princess, this.groundLayer);
+                    this.physics.add.collider(this.case, this.groundLayer);
+                    // this.physics.add.collider(this.case, this.player);
+                    this.physics.add.collider(this.player, this.princess, this.impactPrincess, null, this);
+                });
+            }
+            this.map.getObjectLayer("Springs").objects.forEach((springsData) => {
+                this.springs = new Springs(this, springsData.x, springsData.y, "sprSprings");
+                this.springs.play("sprSpringsIdleMotion");
+                this.springs.body.setImmovable(true);
+                this.springs.body.moves = false;
+                this.physics.add.collider(this.springs, this.groundLayer);
+                this.physics.add.collider(this.player, this.springs, this.impactSprings, null, this);
+            });
+            this.map.getObjectLayer("jumpDemonPoint").objects.forEach((JumpPointData) => {
+                this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y);
+                this.jumpPoint.body.moves = false;
+                this.physics.add.collider(this.jumpPoint, this.groundLayer);
+                this.physics.add.collider(this.demon, this.jumpPoint, this.impactJumpDemon, null, this);
+            });
+        }
         this.map.getObjectLayer("DynamicWorld").objects.forEach((dynamicsWorldData) => {
             var nameWorld = this.getPropertiesObject(dynamicsWorldData.properties, {
                 name: "nameWorld",
@@ -327,31 +333,54 @@ class Scene1PlayGame extends Phaser.Scene {
             console.log("GOTOSTORE");
         });
 
-        this.jump = new AssetStatic(this, this.game.scale.width / 1.09, this.cameras.main.height - 100, "sprController").setDepth(3).setScrollFactor(0).setFrame(4).setScale(1).setVisible(false).setInteractive({ draggable: true });
-        this.fire = new AssetStatic(this, this.game.scale.width / 1.09 - 70, this.cameras.main.height - 45, "sprController").setDepth(3).setScrollFactor(0).setFrame(6).setScale(1).setVisible(false).setInteractive({ draggable: true });
-        // this.jump
-        //     .on("pointerdown", function () {
-        //         isJump = true;
-        //     })
-        //     .on("pointerout", function () {
-        //         isJump = false;
-        //     });
+        this.jump = new AssetStatic(this, this.game.scale.width / 1.09, this.cameras.main.height - 100, "sprController").setDepth(3).setScrollFactor(0).setFrame(4).setVisible(false).setScale(1).setInteractive({ draggable: true });
+        this.fire = new AssetStatic(this, this.game.scale.width / 1.09 - 70, this.cameras.main.height - 45, "sprController").setDepth(3).setScrollFactor(0).setFrame(6).setVisible(false).setScale(1).setInteractive({ draggable: true });
+        this.turnRight = new AssetStatic(this, this.game.config.width / 12 + 90, this.cameras.main.height - 45, "sprController").setDepth(3).setScrollFactor(0).setFrame(2).setVisible(false).setScale(1).setInteractive({ draggable: true });
+        this.turnLeft = new AssetStatic(this, this.game.config.width / 12, this.cameras.main.height - 45, "sprController").setDepth(3).setScrollFactor(0).setFrame(0).setVisible(false).setScale(1).setInteractive({ draggable: true });
 
-        // this.fire
-        //     .on("pointerdown", function () {
-        //         isFire = true;
-        //     })
-        //     .on("pointerout", function () {
-        //         isFire = false;
-        //     });
+        if (!isAutoRun) {
+            this.jump.setVisible(true);
+            this.fire.setVisible(true);
+            this.turnRight.setVisible(true);
+            this.turnLeft.setVisible(true);
+            this.jump
+                .on("pointerdown", function () {
+                    isJump = true;
+                })
+                .on("pointerout", function () {
+                    isJump = false;
+                });
+
+            this.fire
+                .on("pointerdown", function () {
+                    isFire = true;
+                })
+                .on("pointerout", function () {
+                    isFire = false;
+                });
+
+            this.turnLeft
+                .on("pointerdown", function () {
+                    isTurnLeft = true;
+                })
+                .on("pointerup", function () {
+                    isTurnLeft = false;
+                });
+
+            this.turnRight
+                .on("pointerdown", function () {
+                    isTurnRight = true;
+                })
+                .on("pointerup", function () {
+                    isTurnRight = false;
+                });
+        }
 
         this.physics.world.bounds.width = this.groundLayer.width;
         this.physics.world.bounds.height = this.groundLayer.height;
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels - 40);
         this.tapToPlay.setVisible(true);
-        // this.cameras.main.scrollX = this.princess.x - 300;
-        // this.cameras.main.scrollY = this.princess.y;
         this.cameras.main.startFollow(this.player);
         // this.fire.setVisible(true);
         // this.jump.setVisible(true);
@@ -360,21 +389,31 @@ class Scene1PlayGame extends Phaser.Scene {
         this.cameras.main.pan(0, this.groundLayer.height, 1000, "Sine.easeInOut");
         this.cameras.main.setFollowOffset(0, -300);
         Sounds["bgSound"].play();
-        this.input
-            .on("pointerdown", function () {
+        if (isAutoRun) {
+            this.input
+                .on("pointerdown", function () {
+                    if (!Sounds["bgSound"].playing() && !isMuted) {
+                        Sounds["bgSound"].play();
+                    }
+                    this.scene.tapToPlay.setVisible(false);
+                    isPlaygame = true;
+                    isJump = true;
+                })
+                .on("pointerup", function () {
+                    isJump = false;
+                })
+                .on("pointerout", function () {
+                    isJump = false;
+                });
+        } else {
+            this.input.on("pointerdown", function () {
                 if (!Sounds["bgSound"].playing() && !isMuted) {
                     Sounds["bgSound"].play();
                 }
                 this.scene.tapToPlay.setVisible(false);
                 isPlaygame = true;
-                isJump = true;
-            })
-            .on("pointerup", function () {
-                isJump = false;
-            })
-            .on("pointerout", function () {
-                isJump = false;
             });
+        }
         this.cameras.main.roundPixels = true;
         this.cameras.main.pixelArt = true;
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -611,27 +650,31 @@ class Scene1PlayGame extends Phaser.Scene {
         attack.destroy();
     }
 
-    impactFinishPoint(player, finishPoint) {
+    impactFinishPoint(finishPoint, player) {
         console.log("finish");
-        player.anims.play(`${playerImageKey}TurnMotion`, true);
+        // player.anims.play(`${playerImageKey}TurnMotion`, true);
         this.finishPoint.setCollisionByExclusion([0]);
-        player.body.velocity.x = 200;
+        // player.body.velocity.x = 0;
+
         this.add.tween({
-            targets: this.finishPoint,
+            targets: this.player,
             ease: "Sine.easeInOut",
-            duration: 200,
+            duration: 700,
             delay: 0,
             alpha: {
                 getStart: () => 1,
                 getEnd: () => 0,
             },
-
             repeat: 0,
             yoyo: false,
-            loop: 3,
+            loop: 0,
+            onComplete: () => {
+                this.player.onSuccessfuly(this.gameWin);
+                this.player.onSuccessfuly(this.logo);
+                this.player.body.velocity.x = 0;
+                endGame = true;
+            },
         });
-        window.wingame = true;
-        window.isPlaygame = false;
         this.physics.world.removeCollider(collierDemonWithGround);
     }
 
@@ -645,25 +688,27 @@ class Scene1PlayGame extends Phaser.Scene {
             repeat: 0,
         });
 
-        // this.add.tween({
-        //     targets: [player, this.princess],
-        //     ease: "Sine.easeInOut",
-        //     duration: 700,
-        //     delay: 0,
-        //     alpha: {
-        //         getStart: () => 1,
-        //         getEnd: () => 0,
-        //     },
-        //     repeat: 0,
-        //     yoyo: false,
-        //     loop: 0,
-        //     onComplete: () => {
-        //         player.onSuccessfuly(this.gameWin);
-        //         player.onSuccessfuly(this.logo);
-        //         player.body.velocity.x = 0;
-        //         endGame = true;
-        //     },
-        // });
+        if (isPrincess) {
+            this.add.tween({
+                targets: [player, this.princess],
+                ease: "Sine.easeInOut",
+                duration: 700,
+                delay: 0,
+                alpha: {
+                    getStart: () => 1,
+                    getEnd: () => 0,
+                },
+                repeat: 0,
+                yoyo: false,
+                loop: 0,
+                onComplete: () => {
+                    player.onSuccessfuly(this.gameWin);
+                    player.onSuccessfuly(this.logo);
+                    player.body.velocity.x = 0;
+                    endGame = true;
+                },
+            });
+        }
     }
 
     standOnTrap(player, trap) {
@@ -705,7 +750,9 @@ class Scene1PlayGame extends Phaser.Scene {
     update() {
         if (nLoaded >= nAssets) {
             this.player.update();
-            // this.demon.update();
+            if (isAutoRun && isDemonChase) {
+                this.demon.update();
+            }
             // boss.update();
             // this.cameras.main.followOffset.set(0, -200);
             if (this.player.getData("isDead")) {

@@ -21,7 +21,7 @@ class Player extends Entity {
     constructor(scene, x, y, key) {
         super(scene, x, y, key);
         console.log(key);
-        keyPlayer = key
+        keyPlayer = key;
         this.setDepth(2);
         this.body.acceleration.y = 700;
         this.body.setSize(64, 128);
@@ -35,30 +35,41 @@ class Player extends Entity {
         var player = this;
         if (!this.getData("isDead") && isControllable && this.getData("isDead") !== undefined) {
             if (this.scene.sys.game.device.os.desktop) {
-                if (window.isPlaygame) {
-                    player.body.setVelocityX(250);
-                    player.anims.play(`${keyPlayer}TurnMotion`, true);
-                    player.flipX = false;
-                }
-                if (this.scene.cursors.space.isDown) {
-                    // player.body.setVelocityX(250);
-                    // player.anims.play(`${keyPlayer}TurnMotion`, true);
-                    // player.flipX = false;
-                    if (player.getData("timerShootTick") < player.getData("timerShootDelay")) {
-                        player.setData("timerShootTick", player.getData("timerShootTick") + 1);
-                    } else {
-                        this.scene.playSound("attackSound");
-                        if (player.flipX === false) {
-                            player.attack = new PlayerWeapon(player.scene, player.body.x + 40, player.body.y + 40).setDepth(4);
-                            player.attack.flipX = false;
-                            player.attack.setData("isFlip", false);
+                if (isAutoRun) {
+                    if (window.isPlaygame) {
+                        player.body.setVelocityX(250);
+                        player.anims.play(`${keyPlayer}TurnMotion`, true);
+                        player.flipX = false;
+                    }
+                } else {
+                    if (this.scene.cursors.right.isDown) {
+                        player.body.setVelocityX(300);
+                        player.anims.play(`${keyPlayer}TurnMotion`, true);
+                        player.flipX = false;
+                    } else if (this.scene.cursors.left.isDown) {
+                        player.body.setVelocityX(-300);
+                        player.anims.play(`${keyPlayer}TurnMotion`, true);
+                        player.flipX = true;
+                    } else if (this.scene.cursors.space.isDown) {
+                        if (player.getData("timerShootTick") < player.getData("timerShootDelay")) {
+                            player.setData("timerShootTick", player.getData("timerShootTick") + 1);
                         } else {
-                            player.attack = new PlayerWeapon(player.scene, player.body.x - 35, player.body.y + 40).setDepth(4);
-                            player.attack.flipX = true;
-                            player.attack.setData("isFlip", true);
+                            this.scene.playSound("attackSound");
+                            if (player.flipX === false) {
+                                player.attack = new PlayerWeapon(player.scene, player.body.x + 40, player.body.y + 40).setDepth(4);
+                                player.attack.flipX = false;
+                                player.attack.setData("isFlip", false);
+                            } else {
+                                player.attack = new PlayerWeapon(player.scene, player.body.x - 35, player.body.y + 40).setDepth(4);
+                                player.attack.flipX = true;
+                                player.attack.setData("isFlip", true);
+                            }
+                            player.setData("timerShootTick", 0);
+                            player.scene.attackGroup.add(player.attack);
                         }
-                        player.setData("timerShootTick", 0);
-                        player.scene.attackGroup.add(player.attack);
+                    } else {
+                        player.body.velocity.x = 0;
+                        player.anims.play(`${keyPlayer}IdleMotion`);
                     }
                 }
                 if (player.scene.cursors.up.isDown && player.body.onFloor() && player.body.velocity.y >= 0) {
@@ -70,28 +81,42 @@ class Player extends Entity {
                     player.anims.play(`${keyPlayer}JumpMotion`);
                 }
             } else {
-                if (window.isPlaygame) {
-                    player.body.setVelocityX(250);
-                    player.anims.play(`${keyPlayer}TurnMotion`, true);
-                    player.flipX = false;
-                }
-                if (isFire) {
-                    if (player.getData("timerShootTick") < player.getData("timerShootDelay")) {
-                        player.setData("timerShootTick", player.getData("timerShootTick") + 1);
-                    } else {
-                        this.scene.playSound("attackSound");
-                        if (player.flipX === false) {
-                            player.attack = new PlayerWeapon(player.scene, player.body.x + 40, player.body.y + 40).setDepth(4);
-                            player.attack.flipX = false;
-                            player.attack.setData("isFlip", false);
+                if (isAutoRun) {
+                    if (window.isPlaygame) {
+                        player.body.setVelocityX(250);
+                        player.anims.play(`${keyPlayer}TurnMotion`, true);
+                        player.flipX = false;
+                    }
+                } else {
+                    if (isTurnRight) {
+                        player.body.setVelocityX(300);
+                        player.anims.play(`${keyPlayer}TurnMotion`, true);
+                        player.flipX = false;
+                    } else if (isTurnLeft) {
+                        player.body.setVelocityX(-300);
+                        player.anims.play(`${keyPlayer}TurnMotion`, true);
+                        player.flipX = true;
+                    } else if (isFire) {
+                        if (player.getData("timerShootTick") < player.getData("timerShootDelay")) {
+                            player.setData("timerShootTick", player.getData("timerShootTick") + 1);
                         } else {
-                            player.attack = new PlayerWeapon(player.scene, player.body.x - 35, player.body.y + 40).setDepth(4);
+                            this.scene.playSound("attackSound");
+                            if (player.flipX === false) {
+                                player.attack = new PlayerWeapon(player.scene, player.body.x + 40, player.body.y + 40).setDepth(4);
+                                player.attack.flipX = false;
+                                player.attack.setData("isFlip", false);
+                            } else {
+                                player.attack = new PlayerWeapon(player.scene, player.body.x - 35, player.body.y + 40).setDepth(4);
 
-                            player.attack.flipX = true;
-                            player.attack.setData("isFlip", true);
+                                player.attack.flipX = true;
+                                player.attack.setData("isFlip", true);
+                            }
+                            player.setData("timerShootTick", 0);
+                            player.scene.attackGroup.add(player.attack);
                         }
-                        player.setData("timerShootTick", 0);
-                        player.scene.attackGroup.add(player.attack);
+                    } else {
+                        player.body.velocity.x = 0;
+                        player.anims.play(`${keyPlayer}IdleMotion`);
                     }
                 }
                 if (isJump && player.body.onFloor() && player.body.velocity.y >= 0) {
@@ -182,7 +207,7 @@ class Demon extends Entity {
     constructor(scene, x, y, key) {
         super(scene, x, y, key);
         console.log(key);
-        keyDemon = key
+        keyDemon = key;
         this.setDepth(2);
         this.body.acceleration.y = 700;
         this.body.setSize(128, 128).setOffset(0, -10);

@@ -1,4 +1,4 @@
-function gameStart() { }
+function gameStart() {}
 var nAssets = 28;
 var nLoaded = 0;
 var sprMovementDemonImg = new Image(),
@@ -17,6 +17,7 @@ var sprMovementDemonImg = new Image(),
     sprMuteImg = new Image();
 var isControllable = true,
     isTurnRight = false,
+    isTurnLeft = false,
     isPlaygame = false,
     isJump = false,
     isFire = false;
@@ -41,7 +42,7 @@ class Preload extends Phaser.Scene {
     }
 
     preload() {
-        this.load.tilemapTiledJSON('map', 'map.json');
+        this.load.tilemapTiledJSON("map", "map.json");
     }
 
     createGameObjects() {
@@ -62,6 +63,13 @@ class Preload extends Phaser.Scene {
             }),
             frameRate: 30,
             repeat: -1,
+        });
+
+        this.anims.create({
+            key: "sprMovementPlayer1IdleMotion",
+            frames: [{ key: "sprMovementPlayer1", frame: 0 }],
+            frameRate: 0,
+            repeat: 0,
         });
         this.anims.create({
             key: "sprMovementDemonIdleMotion",
@@ -426,5 +434,5 @@ class Preload extends Phaser.Scene {
         sprBonusPointImg.src = sprBlockCoinB64;
     }
 
-    update() { }
+    update() {}
 }
