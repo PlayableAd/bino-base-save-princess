@@ -759,6 +759,11 @@ class Scene1PlayGame extends Phaser.Scene {
             // this.cameras.main.followOffset.set(0, -200);
             if (this.player.getData("isDead")) {
                 Sounds["bgSound"].pause();
+                this.background.tilePositionX += 0;
+            }
+            if (isPlaygame && !this.player.getData("isDead")) {
+
+                this.background.tilePositionX += 4;
             }
             if (endGame && checkEnd == 0) {
                 checkEnd++;
