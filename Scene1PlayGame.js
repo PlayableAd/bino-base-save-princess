@@ -48,7 +48,7 @@ class Scene1PlayGame extends Phaser.Scene {
             this.physics.add.collider(this.player, this.trap, this.standOnTrap, null, this);
             this.physics.add.collider(this.player, this.bossAttackGroup, this.attackPlayer, null, this);
         });
-        if (isAutoRun) {
+        if (isAutoRun && isDemonChase) {
             this.map.getObjectLayer("DemonPosition").objects.forEach((demon) => {
                 console.log(demon);
                 this.demon = new Demon(this, demon.x, demon.y, "sprMovementDemon").setDepth(3).setScale(1);
