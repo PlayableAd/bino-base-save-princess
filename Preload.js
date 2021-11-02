@@ -195,9 +195,9 @@ class Preload extends Phaser.Scene {
             key: "sprCoinMotion",
             frames: this.anims.generateFrameNumbers("sprBonusPoint", {
                 start: 5,
-                end: 7,
+                end: 8,
             }),
-            frameRate: 4,
+            frameRate: 10,
             repeat: -1,
         });
 
@@ -422,8 +422,8 @@ class Preload extends Phaser.Scene {
         sprFlowerEnemyImg.src = sprFlowerEnemyB64;
         sprBonusPointImg.onload = () => {
             this.textures.addSpriteSheet("sprBonusPoint", sprBonusPointImg, {
-                frameWidth: 34,
-                frameHeight: 34,
+                frameWidth: 32,
+                frameHeight: 32,
             });
             nLoaded++;
             if (nLoaded >= nAssets) {

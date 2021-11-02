@@ -3,7 +3,7 @@ let checkEnd;
 let collierDemonWithGround;
 let isAutoRun = true;
 let isDemonChase = false;
-let isPrincess = true;
+let isPrincess = false;
 class Scene1PlayGame extends Phaser.Scene {
     constructor() {
         super({ key: "Scene1PlayGame" });
@@ -253,12 +253,14 @@ class Scene1PlayGame extends Phaser.Scene {
                 this.physics.add.collider(this.springs, this.groundLayer);
                 this.physics.add.collider(this.player, this.springs, this.impactSprings, null, this);
             });
-            this.map.getObjectLayer("jumpDemonPoint").objects.forEach((JumpPointData) => {
-                this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y);
-                this.jumpPoint.body.moves = false;
-                this.physics.add.collider(this.jumpPoint, this.groundLayer);
-                this.physics.add.collider(this.demon, this.jumpPoint, this.impactJumpDemon, null, this);
-            });
+            if (isDemonChase) {
+                this.map.getObjectLayer("jumpDemonPoint").objects.forEach((JumpPointData) => {
+                    this.jumpPoint = new JumpPointDemon(this, JumpPointData.x, JumpPointData.y);
+                    this.jumpPoint.body.moves = false;
+                    this.physics.add.collider(this.jumpPoint, this.groundLayer);
+                    this.physics.add.collider(this.demon, this.jumpPoint, this.impactJumpDemon, null, this);
+                });
+            }
         }
         this.map.getObjectLayer("DynamicWorld").objects.forEach((dynamicsWorldData) => {
             var nameWorld = this.getPropertiesObject(dynamicsWorldData.properties, {
@@ -794,4 +796,4 @@ class Scene1PlayGame extends Phaser.Scene {
         }
     }
 }
-function gameClose() {}
+function gameClose() { }
