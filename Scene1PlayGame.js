@@ -1,7 +1,7 @@
 let playerImageKey = "sprMovementPlayer1";
 let checkEnd;
 let collierDemonWithGround;
-let isAutoRun = true;
+let isAutoRun = false;
 let isDemonChase = false;
 let isPrincess = false;
 class Scene1PlayGame extends Phaser.Scene {
@@ -280,11 +280,11 @@ class Scene1PlayGame extends Phaser.Scene {
             this.physics.add.collider(this.dynamicsWorld, this.groundLayer);
             this.physics.add.collider(this.player, this.dynamicsWorld, (player, block) => {
                 if (isJump && block.body.touching.up) {
-                    this.player.body.setVelocityY(-650);
+                    this.player.body.setVelocityY(-900);
                     this.player.anims.play(`${playerImageKey}IdleMotion`);
                     this.playSound("jumpSound");
                 } else if (this.cursors.up.isDown && block.body.touching.up) {
-                    this.player.body.setVelocityY(-650);
+                    this.player.body.setVelocityY(-900);
                     this.playSound("jumpSound");
                 }
             });
@@ -759,11 +759,11 @@ class Scene1PlayGame extends Phaser.Scene {
             // this.cameras.main.followOffset.set(0, -200);
             if (this.player.getData("isDead")) {
                 Sounds["bgSound"].pause();
-                this.background.tilePositionX += 0;
+                // this.background.tilePositionX += 0;
             }
             if (isPlaygame && !this.player.getData("isDead")) {
 
-                this.background.tilePositionX += 4;
+                // this.background.tilePositionX += 4;
             }
             if (endGame && checkEnd == 0) {
                 checkEnd++;

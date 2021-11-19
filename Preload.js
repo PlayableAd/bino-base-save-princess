@@ -59,9 +59,9 @@ class Preload extends Phaser.Scene {
             key: "sprMovementPlayer1TurnMotion",
             frames: this.anims.generateFrameNumbers("sprMovementPlayer1", {
                 start: 1,
-                end: 11,
+                end: 3,
             }),
-            frameRate: 30,
+            frameRate: 10,
             repeat: -1,
         });
 
@@ -111,7 +111,7 @@ class Preload extends Phaser.Scene {
         });
         this.anims.create({
             key: "sprMovementPlayer1JumpMotion",
-            frames: [{ key: "sprMovementPlayer1", frame: 12 }],
+            frames: [{ key: "sprMovementPlayer1", frame: 4 }],
             frameRate: 4,
             repeat: 0,
         });
@@ -197,7 +197,7 @@ class Preload extends Phaser.Scene {
                 start: 5,
                 end: 8,
             }),
-            frameRate: 10,
+            frameRate: 4,
             repeat: -1,
         });
 
@@ -436,3 +436,4 @@ class Preload extends Phaser.Scene {
 
     update() {}
 }
+// MINTE
